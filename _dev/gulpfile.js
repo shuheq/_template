@@ -76,6 +76,7 @@ gulp.task('third', function(){
 
 	// module js
 	gulp.src(['./third/jquery-1.8.3.min.js'
+		,'./third/jquery.easing-1.3.min.js'
 		,'./third/jquery.cookie-1.4.1.min.js'
 		]).pipe(concat('third.js'))
 		.pipe(gulp.dest('../assets/scripts'));
