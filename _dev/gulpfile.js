@@ -38,7 +38,7 @@ gulp.task('js', function(){
 		.pipe(plumber({
   		errorHandler: notify.onError("Error: <%= error.message %>")
 		}))
-		.pipe(concat('ds.js'))
+		.pipe(concat('scripts.js'))
 		.pipe(uglify({mangle: false}))
 		.pipe(gulp.dest('../assets/scripts'))
 		.pipe(browser.reload({stream:true}));
