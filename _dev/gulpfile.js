@@ -39,7 +39,7 @@ gulp.task('js', function(){
   		errorHandler: notify.onError("Error: <%= error.message %>")
 		}))
 		.pipe(concat('scripts.js'))
-		.pipe(uglify({mangle: false}))
+		//.pipe(uglify({mangle: false}))
 		.pipe(gulp.dest('../assets/scripts'))
 		.pipe(browser.reload({stream:true}));
 
@@ -58,6 +58,49 @@ gulp.task('css', function(){
 			sass: './sass'
 			,css: '../assets/styles'
 		}))
+/* minifyをコメントアウト
+		.pipe(pleeease({
+			fallbacks:{
+				autoprefixer: true
+			}
+			,optimizers:{
+				minifier: true
+			}
+		}))
+*/
+		.pipe(gulp.dest('../assets/styles'))
+		.pipe(browser.reload({stream:true}));
+});
+
+
+// third部品の結合処理
+gulp.task('minify', function(){
+
+	// module js
+	gulp.src(['./third/jquery-1.8.3.min.js'
+		,'./third/jquery.easing-1.3.min.js'
+		,'./third/jquery.cookie-1.4.1.min.js'
+		]).pipe(concat('third.js'))
+		.pipe(gulp.dest('../assets/scripts'));
+		
+  // markups
+	gulp.src(['./views/**/*.html','!' + './views/template/_*.html'])
+		.pipe(plumber({
+  		errorHandler: notify.onError("Error: <%= error.message %>")
+		}))
+    .pipe(ejs())
+		.pipe(gulp.dest('../'))
+		.pipe(browser.reload({stream:true}));
+
+  // css
+	gulp.src(['./sass/*.scss'])
+	  .pipe(plumber({
+  		errorHandler: notify.onError("Error: <%= error.message %>")
+		}))
+		.pipe(compass({
+			sass: './sass'
+			,css: '../assets/styles'
+		}))
 		.pipe(pleeease({
 			fallbacks:{
 				autoprefixer: true
@@ -68,18 +111,16 @@ gulp.task('css', function(){
 		}))
 		.pipe(gulp.dest('../assets/styles'))
 		.pipe(browser.reload({stream:true}));
-});
 
-
-// third部品の結合処理
-gulp.task('third', function(){
-
-	// module js
-	gulp.src(['./third/jquery-1.8.3.min.js'
-		,'./third/jquery.easing-1.3.min.js'
-		,'./third/jquery.cookie-1.4.1.min.js'
-		]).pipe(concat('third.js'))
-		.pipe(gulp.dest('../assets/scripts'));
+  // js
+  gulp.src(['./scripts/*.js'])
+		.pipe(plumber({
+  		errorHandler: notify.onError("Error: <%= error.message %>")
+		}))
+		.pipe(concat('scripts.js'))
+		.pipe(uglify({mangle: false}))
+		.pipe(gulp.dest('../assets/scripts'))
+		.pipe(browser.reload({stream:true}));
 });
 
 
